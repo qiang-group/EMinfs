@@ -17,3 +17,5 @@ Suggests:
     knitr,
     rmarkdown
 VignetteBuilder: knitr
+URL: https://github.com/qiang-group/EMinfs
+BugReports: https://github.com/qiang-group/EMinfs/issues
