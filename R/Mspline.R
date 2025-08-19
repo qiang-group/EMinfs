@@ -1,3 +1,13 @@
+#' Generate M-Spline Basis Functions
+#'
+#' Computes the basis functions for M-splines, which are non-negative splines
+#' useful for modeling hazard functions. [cite_start]This function is based on the work of Ramsay (1988)[cite: 95].
+#'
+#' @param x A numeric vector of values at which to evaluate the spline basis.
+#' @param order An integer specifying the order of the spline (e.g., 2 for quadratic).
+#' @param knots A numeric vector of knot locations for the spline.
+#'
+#' @return A matrix where each column is an M-spline basis function evaluated at the points in `x`.
 
 Mspline<-function(x,order,knots){
   # get M spline and I spline matrix with order

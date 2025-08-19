@@ -1,0 +1,36 @@
+---
+title: "Using EMinfs to Analyze Interval Censored Data"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using EMinfs to Analyze Interval Censored Data}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+
+library(EMinfs)
+data("chloroprene_data")
+
+# Assuming the column order from the original script
+d <- chloroprene_data[, 9]
+s <- chloroprene_data[, 11]
+Ci <- chloroprene_data[, 8]
+Xp <- as.matrix(chloroprene_data[, c(2, 3, 4, 13)])
+
+model_fit <- estimate_em_model(
+  d = d,
+  s = s,
+  Ci = Ci,
+  Xp = Xp
+)
+
+# Print the main coefficients of interest (for failure time T)
+print(model_fit$coefficients_t)
+
+# To see all returned results, you can view the structure of the object
+str(model_fit)

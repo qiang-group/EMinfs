@@ -1,5 +1,15 @@
-##################################################################
-# Support function used to compute the spline basis functions
+#' Generate I-Spline Basis Functions
+#'
+#' Computes the basis functions for I-splines, which are integrated M-splines.
+#' I-splines are non-decreasing functions useful for modeling cumulative hazard functions.
+#' This function is based on the work of Ramsay (1988).
+#'
+#' @param x A numeric vector of values at which to evaluate the spline basis.
+#' @param order An integer specifying the order of the spline (e.g., 2 for quadratic).
+#' @param knots A numeric vector of knot locations for the spline.
+#'
+#' @return A matrix where each column is an I-spline basis function evaluated at the points in `x`.
+
 
 Ispline <-
   function(x,order,knots){

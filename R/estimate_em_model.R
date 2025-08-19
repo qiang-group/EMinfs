@@ -1,4 +1,17 @@
-estimate_em_model <- function(d, s, Ci, Xp, n_knots = 5, spline_order = 2, tol = 1e-5, max_iter = 1500) {
+#' Fit a Gamma Frailty Model for Interval Censored Data
+#'
+#' @param d A numeric vector for the tumor status indicator (1 if tumor present, 0 otherwise).
+#' @param s A numeric vector for the informative censoring indicator (1 if informative, 0 otherwise).
+#' @param Ci A numeric vector of the observed censoring times.
+#' @param Xp A numeric matrix of covariates.
+#' @param n_knots An integer specifying the number of interior knots for the splines. Default is 5.
+#' @param spline_order An integer specifying the order of the I-splines and M-splines. Default is 2.
+#' @param tol The convergence tolerance for the EM algorithm. Default is 1e-5.
+#' @param max_iter The maximum number of iterations for the EM algorithm. Default is 10000.
+#' @return A list containing the final model estimates and convergence details.
+#' @export
+#'
+estimate_em_model <- function(d, s, Ci, Xp, n_knots = 5, spline_order = 2, tol = 1e-5, max_iter = 10000) {
 
   # --- Setup Splines ---
   ti <- Ci
@@ -44,7 +57,6 @@ estimate_em_model <- function(d, s, Ci, Xp, n_knots = 5, spline_order = 2, tol =
     H1 <- function(tau) {
       -length(d) * log(gamma(tau)) + length(d) * tau * log(tau) + tau * sum(Elogetai - Eetai)
     }
-    # Using try() to handle potential errors in maxLik
     tau1_fit <- try(maxLik::maxLik(H1, start = tau0), silent = TRUE)
     if (inherits(tau1_fit, "try-error")) {
       warning("maxLik failed for tau; using previous value.")
@@ -75,24 +87,34 @@ estimate_em_model <- function(d, s, Ci, Xp, n_knots = 5, spline_order = 2, tol =
     prev_params <- c(Cb0, Cg0, Tb0, Tg0, tau0)
     diff0 <- max(abs(current_params - prev_params))
 
-    Cg0 <- as.vector(Cg1)
-    Tg0 <- as.vector(Tg1)
-    Cb0 <- as.vector(Cb1)
-    Tb0 <- as.vector(Tb1)
+    Cg0 <- as.vector(Cg1); Tg0 <- as.vector(Tg1)
+    Cb0 <- as.vector(Cb1); Tb0 <- as.vector(Tb1)
     tau0 <- tau1
-
-    # Optional: print progress
-    # print(paste("Iteration:", i, "Difference:", diff0))
   }
 
-  # --- Final Calculations (Variance) ---
+  # --- Final Calculations (Strictly following original script) ---
   variance_matrix <- Louis(tau0, Cb0, Cg0, Tb0, Tg0, bdervativeCi, bCi, s, d, Xp)
+
+  se_list <- tryCatch({
+    variances <- diag(solve(variance_matrix))
+    all_se <- sqrt(variances)
+    num_covariates <- ncol(Xp)
+    se_c <- all_se[2:(1 + num_covariates)]
+    se_t <- all_se[(2 + num_covariates):(1 + 2 * num_covariates)]
+    list(se_c = se_c, se_t = se_t)
+  }, error = function(e) {
+    warning("Could not compute standard errors: variance-covariance matrix may be singular.")
+    num_covariates <- ncol(Xp)
+    list(se_c = rep(NA, num_covariates), se_t = rep(NA, num_covariates))
+  })
 
   # --- Return a structured list of results ---
   results <- list(
     coefficients_c = Cb0,
-    spline_coeffs_c = Cg0,
+    std_err_c = se_list$se_c,
     coefficients_t = Tb0,
+    std_err_t = se_list$se_t,
+    spline_coeffs_c = Cg0,
     spline_coeffs_t = Tg0,
     tau = tau0,
     variance_matrix = variance_matrix,

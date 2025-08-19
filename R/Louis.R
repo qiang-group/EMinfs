@@ -1,3 +1,22 @@
+#' Calculate Variance-Covariance Matrix using Louis's Method
+#'
+#' Computes the observed information matrix to estimate the variance-covariance
+#' matrix of the model parameters using the method described by Louis (1982).
+#' This method is applied after the EM algorithm has converged.
+#'
+#' @param t The final estimate for the frailty parameter `tau`.
+#' @param Cb2 Final estimates for the regression coefficients `beta_C`.
+#' @param Cg2 Final estimates for the spline coefficients `gamma_C`.
+#' @param Tb2 Final estimates for the regression coefficients `beta_T`.
+#' @param Tg2 Final estimates for the spline coefficients `gamma_T`.
+#' @param bdervativeCi The M-spline basis matrix for the censoring times.
+#' @param bCi The I-spline basis matrix for the censoring times.
+#' @param s The event indicator for informative censoring (1 if event, 0 if censored).
+#' @param d The tumor status indicator (1 if tumor present, 0 otherwise).
+#' @param Xp The matrix of covariates.
+#'
+#' @return The estimated variance-covariance matrix for all model parameters.
+#' @export
 Louis = function (t, Cb2, Cg2, Tb2, Tg2, bdervativeCi, bCi, s, d, Xp)
 {
   # variance estimation
@@ -24,13 +43,6 @@ Louis = function (t, Cb2, Cg2, Tb2, Tg2, bdervativeCi, bCi, s, d, Xp)
 
   Q2drcrc =  - diag(as.vector(colSums(s * EVil)/ Cg2 / Cg2))                                 #7 * 7
   Q2drtrt =  - diag(as.vector(colSums(EZil)/ Tg2 / Tg2))                                     #7 * 7
-  #                       tau      bc      bt       rc       rt
-  # Qdtheta2 = matrix(
-  #           tau        Q2dtau2,  0,      0,       0,       0,
-  #           bc           0,      Q2dbc2, 0,       Q2dbcrc, 0,
-  #           bt           0,      0,      Q2dbt2,  0,       Q2dbtrt,
-  #           rc           0,      Q2dbcrc,0,       Q2drcrc, 0,
-  #           rt           0,      0,      Q2dbtrt, 0,       Q2drtrt )
 
   Qdtheta2 =
     rbind(           c(Q2dtau2,       matrix(0,1,2*nods_k+2*k)                              ),
@@ -109,15 +121,6 @@ Louis = function (t, Cb2, Cg2, Tb2, Tg2, bdervativeCi, bCi, s, d, Xp)
     t(t(bCi * as.vector(exp(Xp %*% Tb2))) %*% t(t(Cov_Zij_etai)/Tg2))
   rc_rt = t(bCi * as.vector(exp(Xp %*% Cb2))) %*% (bCi * as.vector(exp(Xp %*% Tb2) * Var_eta)) -
     t(bCi * as.vector(exp(Xp %*% Cb2))) %*% t(t(Cov_Zij_etai)/Tg2)
-
-  #                             tau      bc           bt           rc            rt
-  # Var_logL_theta = matrix(
-  #               tau         c(tau2,    tau_bc  ,    tau_bt,      tau_rc,       tau_rt,
-  #               bc            tau_bc,  bc2(2*2),    bc_bt(2*2),  bc_rc(2*2),   bc_rt(2*7),
-  #               bt            tau_bt,  bc_bt(7*2),  bt2(7*7),    rc_bt(7*2),   bt_rt(7*7),
-  #               rc            tau_rc,  bc_rc(2*2),  rc_bt(2*7),  rc2(2*2),     rc_rt(2*7),
-  #               rt            tau_rt,  rt_bc(7*2),  rt_bt(7*7),  rt_rc(7*2),   rt2(7*7))    )
-
 
   Var_logL_theta = rbind(   c(  tau2    ,   tau_bc,   tau_bt,   tau_rc,  tau_rt),
                             cbind(t(tau_bc),      bc2,    bc_bt,    bc_rc,   bc_rt),

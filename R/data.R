@@ -1,0 +1,24 @@
+#' Tumor Data from the NTP Chloroprene Study
+#'
+#' A dataset containing information on the occurrence of alveolar/bronchiolar
+#' adenomas in mice from a National Toxicology Program (NTP) study on chloroprene.
+#'
+#' @format A data frame with 400 rows and 13 columns:
+#' \describe{
+#'   \item{Animal.Number}{Unique identifier for each animal.}
+#'   \item{Cage.Number}{The cage number for the animal.}
+#'   \item{Days.On.Study}{The observed censoring time in days.}
+#'   \item{Gender.1.male.0.female}{Gender of the mouse.}
+#'   \item{Group.12.8}{Indicator for dose group 12.8 ppm.}
+#'   \item{Group.30}{Indicator for dose group 30 ppm.}
+#'   \item{Group.80}{Indicator for dose group 80 ppm.}
+#'   \item{Informative.C.s}{Informative censoring indicator (1 = moribund sacrifice, 0 = other).}
+#'   \item{Lesion.Found}{Tumor status indicator (1 = tumor present, 0 = absent).}
+#'   \item{Lesion.Name}{Name of the lesion.}
+#'   \item{No..Examined}{Number of animals examined.}
+#'   \item{Removal.Reason}{Reason for the animal's removal from the study.}
+#'   \item{Treatment.Group}{The treatment group description.}
+#' }
+#' @source National Toxicology Program (1998). NTP TR-467: Toxicology and
+#' Carcinogenesis Studies of Chloroprene.
+"chloroprene_data"

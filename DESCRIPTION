@@ -3,10 +3,17 @@ Title: Regression Analysis of Current Status Data Under Informative Censoring
 Version: 0.1.0
 Authors@R: person("Qiang", "Zheng", email = "qiangzheng206@gmail.com", role = c("aut", "cre"),
     comment = c())
-[cite_start]Description: Implements a Gamma frailty proportional hazards model to analyze current status data subject to a mix of informative and non-informative censoring times[cite: 9]. [cite_start]A computationally efficient Expectation-Maximization (EM) algorithm is used for parameter estimation, based on a three-step data augmentation that involves multinomial and Poisson latent variables[cite: 10, 282]. [cite_start]The method is robust and provides variance estimation in a closed form[cite: 10].
+Description: Implements a Gamma frailty proportional hazards model to analyze current status data subject to a mix of informative and non-informative censoring times[cite: 9]. [cite_start]A computationally efficient Expectation-Maximization (EM) algorithm is used for parameter estimation, based on a three-step data augmentation that involves multinomial and Poisson latent variables[cite: 10, 282]. [cite_start]The method is robust and provides variance estimation in a closed form[cite: 10].
 License: MIT + file LICENSE
 Encoding: UTF-8
 RoxygenNote: 7.3.1
 Imports: 
     maxLik,
     rootSolve
+Depends: 
+    R (>= 3.5)
+LazyData: true
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr
