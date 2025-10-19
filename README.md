@@ -1,7 +1,7 @@
-# EMinfs: Gamma Frailty Proportional Hazards Model for Current Status Data
+# EMinfs: Gamma frailty proportional hazards model for Regression analysis of current status data subject to informative censoring
 
 This repository provides the R implementation for the manuscript  
-**"Regression Analysis of Current Status Data Under Informative Censoring"**  
+**"Gamma frailty proportional hazards model for Regression analysis of current status data subject to informative censoring"**  
 by *Qiang Zheng, Lianming Wang, Xiaoyan Lin, and Dengdeng Yu*.
 
 ---
