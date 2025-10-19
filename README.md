@@ -1,4 +1,4 @@
-# EMinfs: Gamma frailty proportional hazards model for Regression analysis of current status data subject to informative censoring
+# EMinfs: a R package for regression analysis of current status data subject to informative censoring
 
 This repository provides the R implementation for the manuscript  
 **"Gamma frailty proportional hazards model for Regression analysis of current status data subject to informative censoring"**  
@@ -8,20 +8,19 @@ by *Qiang Zheng, Lianming Wang, Xiaoyan Lin, and Dengdeng Yu*.
 
 ## 🧭 Overview
 
-**EMinfs** implements the algorithm of the **Gamma frailty proportional hazards (PH)** model for analyzing **current status data** subject to **mixed censoring** (both informative and non-informative).  
+**EMinfs** introduces a **three-step data-augmentation EM algorithm** using multinomial and Poisson latent variables.  
 
-The method introduces a **three-step data-augmentation EM algorithm** using multinomial and Poisson latent variables.  
 It provides:
 - Closed-form variance estimation  
 - Robust convergence and numerical stability  
 - Fast computation and scalability  
-- Flexible baseline hazard estimation via **monotone I-splines**
+- Flexible baseline hazard estimation
 
 This approach extends traditional PH frailty models by introducing a latent Gamma variable that captures the dependence between failure and censoring times without requiring additional parameters.
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Installation & An example 
 
 You can install the latest version directly from GitHub:
 
